@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="http://code.createjs.com/easeljs-0.7.0.min.js"></script>
+        <script>
+            var stage;
+            var circle;
+
+            function init() {
+                stage = new createjs.Stage("demoCanvas");
+                circle = new createjs.Shape();
+                circle.graphics.beginFill("red").drawCircle(0, 0, 5);
+                circle.x = 100;
+                circle.y = 100;
+                stage.addChild(circle);
+
+                stage.update();
+            }
+
+            function updatePosition(x, y) {
+                circle.x = x;
+                circle.y = y;
+                stage.update();
+            }
+
+            var ws;
+
+            ws = new WebSocket("ws://localhost:8888/websocket");
+            ws.onmessage = function(e) {
+                var resp = JSON.parse(e.data);
+                console.log(resp);
+                updatePosition(resp.position[0], resp.position[1]);
+            };
+
+            ws.onopen = function() {
+                console.log("Connection established.");
+                function updateWorld() {
+                    ws.send('test');
+                }
+                setInterval(updateWorld, 10);
+            };
+        </script>
+    </head>
+    <body onload="init();">
+        <canvas id="demoCanvas" width="800" height="800" style="border: 1px solid black;">
+            alternate content
+        </canvas>
+    </body>
+</html>

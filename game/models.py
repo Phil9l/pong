@@ -54,14 +54,12 @@ class Field:
     def __init__(self, width, height):
         self._space = pymunk.Space()
         borders = [
-            pymunk.Segment(self._space.static_body, (0, 800), (0, 800), 2),
-            pymunk.Segment(self._space.static_body, (0, 800), (800, 800), 2),
-            pymunk.Segment(self._space.static_body, (800, 800), (800, 0), 2),
-            pymunk.Segment(self._space.static_body, (800, 0), (0, 0), 2)
-
-            # pymunk.Segment(self._space.static_body, (0, 0), (width, 0), 2),
-            # pymunk.Segment(self._space.static_body, (0, height),
-            #                (width, height), 2),
+            pymunk.Segment(self._space.static_body, (0, 0), (0, height), 1),
+            pymunk.Segment(self._space.static_body, (0, height),
+                           (width, height), 1),
+            pymunk.Segment(self._space.static_body, (width, height),
+                           (width, 0), 1),
+            pymunk.Segment(self._space.static_body, (width, 0), (0, 0), 1)
         ]
         for border in borders:
             border.elasticity = 1.0
@@ -82,7 +80,7 @@ class Field:
         # h.begin = _handler
         # self._space.add(left_sensor)
 
-        self._ball = Ball(Vector(width // 2, height // 2), Vector(1, 10))
+        self._ball = Ball(Vector(width // 2, height // 2), Vector(10, 1))
         self._ball.add_to_space(self._space)
 
     def update(self, delta):
